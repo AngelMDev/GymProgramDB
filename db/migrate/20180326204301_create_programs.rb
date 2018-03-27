@@ -7,6 +7,7 @@ class CreatePrograms < ActiveRecord::Migration[5.1]
       t.integer :score
       t.integer :author_id
       t.integer :days
+      t.string :content
     end
   end
 end
