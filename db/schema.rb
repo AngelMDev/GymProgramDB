@@ -10,13 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180326210725) do
-
-  create_table "gym_submissions", force: :cascade do |t|
-    t.integer "gym_program_id"
-    t.integer "author_id"
-    t.string "date"
-  end
+ActiveRecord::Schema.define(version: 20180326204332) do
 
   create_table "programs", force: :cascade do |t|
     t.string "name"

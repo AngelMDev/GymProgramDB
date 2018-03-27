@@ -1,0 +1,20 @@
+<%= form_for @program, url: {action: "create"}, html: {class: "nifty_form"} do |f| %>
+  <%= f.label "Name: "%>
+  <%= f.text_field :name %>
+  <div class="control-group">
+  <div class="controls"> Program Type:
+  <%=f.select(:program_type, options_for_select([['Bodybuilding'], ['Powerlifting'], ['Strongman'], ['Olympic']]))%>
+  </div>
+  </div>
+  <div class="controls"> Difficulty:
+  <%=f.select(:difficulty, options_for_select([['Beginner'], ['Intermediate'], ['Advanced']]))%>
+  </div>
+  </div>
+  <%=f.label "Number of days: "%>
+  <%=f.text_field :days%>
+  <br>
+  <%=f.label "Content:"%>
+   <%=f.text_field :content, :cols => 100, :rows => 50%>
+  <br>
+  <%= f.submit "Create" %>
+<% end %>
