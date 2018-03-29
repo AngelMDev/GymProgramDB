@@ -1,5 +1,5 @@
 class Program < ActiveRecord::Base
-  has_one :user
+  belongs_to :user
 
   validates :name, presence: true
 end

@@ -1,4 +1,6 @@
 class ProgramsController < ApplicationController
+ before_action :authenticate_user!, except: [:bodybuilding_index,:olympic_index, :powerlifting_index, :strongman_index, :show]
+
   def bodybuilding_index
     @programs=Program.where(program_type: "Bodybuilding")
   end
@@ -20,8 +22,10 @@ class ProgramsController < ApplicationController
   end
 
   def create
-    program = Program.create!(program_params)
-    redirect_to program
+    @program=current_user.programs.new(program_params)
+    if @program.save
+      redirect_to @program
+    end
   end
   
   def new
@@ -36,6 +40,6 @@ class ProgramsController < ApplicationController
 
   private
   def program_params
-    params.require(:program).permit(:name,:program_type,:difficulty,:score,:author_id,:days,:content)
+    params.require(:program).permit(:name,:program_type,:difficulty,:score,:user_id,:days,:content)
   end
 end

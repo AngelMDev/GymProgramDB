@@ -5,7 +5,7 @@ class CreatePrograms < ActiveRecord::Migration[5.1]
       t.string :program_type
       t.string :difficulty
       t.integer :score
-      t.integer :author_id
+      t.integer :user_id
       t.integer :days
       t.string :content
     end

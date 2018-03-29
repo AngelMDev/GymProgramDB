@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  has_many :program
+  has_many :programs
   attr_accessor :login
 
   validates :username, presence: :true, uniqueness: { case_sensitive: false }
