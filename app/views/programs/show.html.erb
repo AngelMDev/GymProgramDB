@@ -1,4 +1,18 @@
+<%=link_to("Back",:back)%>
 <h3><%=@program.name%></h3>
-<h4><%=@program.difficulty%> program</h4>
-<%=@program.content%>
+by <%=@author_name%>
+<br>
+<h4><%=@program.program_type%></h4>
+<br>
+<%=@program.difficulty%> program
+<br>
 <div>Duration: <%=@program.days%> days </div>
+<br>
+<%=@program.content%>
+<br>
+<%if @user_can_edit%>
+  <%=link_to("Edit Program","/programs/#{@program.id}/edit")%>
+<%end%>
+<%if @user_can_delete%>
+  <%= button_to "Delete", @program, :method => :delete, data: { confirm: "Are you sure?" } %>
+<%end%>

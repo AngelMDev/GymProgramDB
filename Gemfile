@@ -43,6 +43,8 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'devise'
   gem 'pry-rails'
+  gem 'bootstrap-sass'
+  gem 'jquery-rails'
 end
 
 group :development do

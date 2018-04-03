@@ -1,4 +1,8 @@
 <h3>Powerlifting programs:</h3>
 <%@programs.each do |program|%>
 <%= link_to(program.name,"/programs/#{program.id}")%>
+<br>
 <%end%>
+<br>
+<%= link_to(@programs[0].name,"/programs/#{@programs[0].id}")%>
+<%=link_to("Create Program","/programs/new")%>

@@ -1,4 +1,7 @@
 <h3>Olympic programs:</h3>
 <%@programs.each do |program|%>
 <%= link_to(program.name,"/programs/#{program.id}")%>
+<br>
 <%end%>
+<br>
+<%=link_to("Create Program","/programs/new")%>

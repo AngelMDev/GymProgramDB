@@ -19,6 +19,19 @@ class ProgramsController < ApplicationController
 
   def show
      @program=Program.find(params[:id])
+     @author_name=User.find(@program.user_id).username
+     @user_can_edit = current_user && (current_user.id==@program.user_id || current_user.admin?)
+     @user_can_delete = current_user && current_user.admin?
+  end
+
+  def edit
+    @program = Program.find(params[:id])
+  end
+
+  def update
+    program = Program.find(params[:id])
+    program.update!(program_params)
+    redirect_to program
   end
 
   def create
