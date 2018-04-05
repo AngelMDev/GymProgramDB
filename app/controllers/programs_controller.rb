@@ -23,15 +23,19 @@ class ProgramsController < ApplicationController
      @author_name=User.find(@program.user_id).username
      @user_can_edit = current_user && (current_user.id == @program.user_id || current_user.admin?)
      @user_can_delete = current_user && current_user.admin?
-     @user_can_vote = current_user && (current_user.id != @program.user_id || current_user.admin?)
+     @user_can_vote = current_user && (current_user.id != @program.user_id && !Score.exists?(:user_id => current_user.id)) || current_user.admin?
   end
 
   def upvote
-    Program.increment_counter(:score, params[:id])
+    if (current_user && (current_user.id != @program.user_id && !Score.exists?(:user_id => current_user.id)) || current_user.admin?)
+      object=Score.new(:user_id => current_user.id,:program_id => params[:id],:direction => 1)
+      object.save
+    end
   end
 
   def downvote
-    Program.decrement_counter(:score, params[:id])
+    object=Score.new(:user_id => current_user.id,:program_id => params[:id],:direction => -1)
+    object.save
   end
 
   def edit
@@ -66,5 +70,8 @@ class ProgramsController < ApplicationController
   private
   def program_params
     params.require(:program).permit(:name,:program_type,:difficulty,:score,:user_id,:days,:content)
+  end
+  def score_params
+    params.require(:score).permit(:user_id,:program_id,:direction)
   end
 end

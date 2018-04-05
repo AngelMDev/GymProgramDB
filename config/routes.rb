@@ -7,11 +7,11 @@ Rails.application.routes.draw do
   get "programs/powerlifting_index", to: 'programs#powerlifting_index'
   get "programs/strongman_index", to: 'programs#strongman_index'
   resources :programs 
+  resources :users
   resources :programs do
     member do
       put :upvote
       put :downvote
     end
   end
-  resources :users
 end
