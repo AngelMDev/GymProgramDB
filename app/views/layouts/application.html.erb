@@ -3,28 +3,36 @@
   <head>
     <title>GymProgramsDb</title>
     <%= csrf_meta_tags %>
-
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.4/TweenMax.min.js"></script>
   </head>
 
   <body>
 
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-    
-        <a class="navbar-brand abs" href="/">LiftsDB</a>
-    
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark"> 
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js'></script>
+    <a class="navbar-brand d-flex w-50 mr-auto" href="/">LiftsDB</a> 
+    <div class="navbar-collapse ">
+      <form class="search" id="form_search">
+        <input class="search-input" id="input_search" type="text" autocomplete="off"/>
+        <label class="search-label" for="input" id="label_search"></label>
+        <button class="search-button" type="reset" id="button_search"></button>
+        <div class="search-border" id="border_search"></div>
+        <div class="search-close" id="close_search">x</div>
+      </form>
+    </div>   
     <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
         <ul class="navbar-nav ml-auto">
             <%if user_signed_in?%>
-            <li class="nav-item">
-              <button class="btn btn-success my-2 my-sm-0", onclick=<%= edit_user_registration_path %>><%= current_user.username %></button>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link", href=<%= destroy_user_session_path %> data-method="delete">Log out</a>
-            </li>
+              <li class="nav-item">
+                <a class="btn btn-success", href= <%= edit_user_registration_path %> , role="button"><%= current_user.username %></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link", href=<%= destroy_user_session_path %> data-method="delete">Log out</a>
+              </li>
             <%else%>
               <li class="nav-item">
                 <a class="nav-link", href= <%= new_user_session_path %>>Log in</a>
@@ -37,13 +45,148 @@
     </div>
 </nav>
 
+
+
  <div class="container">
-    <%if notice%><div class="alert alert-info"><%=notice%></div> <%end%>
+    <%if notice%><div class="alert alert-success"><%=notice%></div> <%end%>
     <%if alert %><div class="alert alert-warning"><%=alert%></div> <%end%>
   </div>
 
-    <div class="container-fluid">
-    <%=yield%>
-    </div>
+  <script>
+    let search = document.querySelector('.search');
+    let searchInp = search.children[0];
+    let searchLbl = search.children[1];
+    let searchBtn = search.children[2];
+    let searchBrd = search.children[3];
+    let searchCls = search.children[4];
+    let searchTxt, clonedTxt, clonedLbl, clonedLblWrap, animating = false, busy = true;
+    let TLTxt = new TimelineLite();
+    let TLSrch = new TimelineLite({onReverseComplete: () => {
+      TLTxt.clear();
+      animating = false;
+    }});
+
+    createTxt('Find a program', searchLbl, 'search-text');
+    searchTxt = document.querySelectorAll('.search-text');
+
+    searchBtn.addEventListener('click', () => {
+      if (!animating) animSearch();
+    });
+
+    searchBrd.addEventListener('click', () => {
+      if (!animating) animSearch();
+    });
+
+    searchInp.addEventListener('focus', () => {
+      if (busy || searchInp.value.trim().length) return;
+      TLTxt.isActive() ? TLTxt.play() : TLTxt.restart().timeScale(1).staggerTo(searchTxt, .07, {opacity: 0}, .035); 
+    });
+
+    searchInp.addEventListener('blur', () => {
+      if (busy || searchInp.value.trim().length) return;
+      TLTxt.reverse().timeScale(1.3);
+    });
+
+    search.addEventListener('submit', e => {
+      e.preventDefault();
+      busy = true;
+      TLTxt.paused() ? TLTxt.clear() : TLTxt.play();
+      let val = searchInp.value.trim();
+      searchInp.disabled = true;
+      if (val.length) {
+        cloneLbl();
+        createLblTxt(val);
+      }
+      else TLSrch.reverse();
+      searchInp.value = '';
+      searchInp.blur();
+    });
+
+    searchCls.addEventListener('mousedown', e => {
+      e.preventDefault();
+    });
+
+    searchCls.addEventListener('click', () => {
+      if (busy) return;
+      busy = true;
+      let val = searchInp.value.trim();
+      searchInp.disabled = true;
+      if (val.length) {
+        cloneLbl();
+        createLblTxt(val);
+      }
+      else {
+        TLTxt.isActive() ? TLTxt.play() : TLTxt.progress() == 1 ? TLTxt.clear() :
+          TLTxt.restart().timeScale(1).staggerTo(searchTxt, .07, {opacity: 0}, .035);
+        TLSrch.reverse();
+      }
+      searchInp.value = '';
+      searchInp.blur();
+    });
+
+    function createTxt(text, elLbl, textClass) {
+      let splitText = [];
+      for (let i = text.length; i--;) {
+        splitText.unshift(`<span class='${textClass}'>${text[i]}</span>`);
+      }
+      elLbl.innerHTML = splitText.join('');
+    };
+
+    function createLblTxt(val) {
+      createTxt(val, clonedLbl, 'cloned-text');
+      clonedTxt = document.querySelectorAll('.cloned-text');
+      animClonedTxt(Array.from(clonedTxt).reverse());
+    }
+
+    function animSearch() {
+      animating = true;
+      TLSrch.restart()
+      .to(search, .20 , {x:120, ease: Sine.easeIn})
+      .to(searchBrd, .20, {scaleX: 2, x: 40/*<---*/, y: 0, ease: Sine.easeIn})
+      .to(searchBtn, .20, {rotationX: 90, ease: Sine.easeIn}, '-=.4')
+      .to(searchBrd, .20, {rotation: 180, x: '-=6', y: '+=10', ease: Power2.easeInOut})
+      .set(searchBrd, {transformOrigin: '0', marginLeft: '38px'}) 
+      .to(searchBrd, .20, {scaleX: 13, ease: Power1.easeOut})
+      .set(search, {className: '+=edge', onComplete: showTxt})
+      .to(searchInp, .20, {scaleX: 1, ease: Sine.easeInOut}, '-=.3')
+      .set(searchCls, {className: '+=visible'})
+      .addPause();
+    }
+
+    function showTxt() {
+      let tl = new TimelineLite({onStart: () => {searchInp.disabled = true}});
+      tl.staggerTo(searchTxt, .07, {opacity: 1}, .035);
+      setTimeout(() => {
+        searchInp.disabled = false;
+        busy = false;
+      }, 300)
+    }
+
+    function animClonedTxt(el) {
+      let scrollW = clonedLbl.scrollWidth;
+      let offsetW = scrollW - clonedLbl.offsetWidth;
+      let tl = new TimelineLite({onComplete: () => {clonedLblWrap.remove()}});
+      tl.staggerTo(el, .08, {opacity: 0}, .04);
+      let tlDur = tl.totalDuration();
+      let offsetTime = (offsetW * tlDur) / scrollW;
+      if (offsetW > 0) {
+        TweenLite.fromTo(clonedLbl, offsetTime, {x: -offsetW}, {x: 0, delay: .2, ease: SlowMo.ease.config(0.1, 0.1, false)});
+      };
+      setTimeout(() => {
+        TLSrch.reverse();
+      }, Math.max((tlDur - .15) * 1000, 0));
+    }
+
+    function cloneLbl() {
+      clonedLblWrap = document.createElement('div');
+      clonedLblWrap.className = 'search-label';
+      search.appendChild(clonedLblWrap);
+      clonedLbl = document.createElement('div');
+      clonedLblWrap.appendChild(clonedLbl);
+    };
+  </script>
+
+  <%=yield%>
+
   </body>
 </html>

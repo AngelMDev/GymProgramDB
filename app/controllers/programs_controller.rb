@@ -3,6 +3,7 @@ class ProgramsController < ApplicationController
 
   def bodybuilding_index
     @programs=Program.where(program_type: "Bodybuilding")
+    layout false
   end
 
   def olympic_index
@@ -10,7 +11,7 @@ class ProgramsController < ApplicationController
   end
 
   def powerlifting_index
-    @programs=Program.where(program_type: "Powerlifting")
+    @pl_programs=Program.where(program_type: "Powerlifting")
   end
 
   def strongman_index

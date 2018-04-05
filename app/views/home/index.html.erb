@@ -1,9 +1,30 @@
+<div class="cont external">
+  <div class="powerlifting section" onclick="growDiv('pl')">
+    <div class="pl_content" id="pl">
+        <h3>Powerlifting programs:</h3>
+        <%@pl_programs.each do |program|%>
+        <%= link_to(program.name,"/programs/#{program.id}")%>
+        <br>
+        <%end%>
+        <br>
+        <a class="btn btn-success", href="/programs/new", role="button">Create Program</a>
+    </div>
+  </div>
+  <div class="bodybuilding section">
+  </div>
+  <div class="strongman section">
+  </div>
+  <div class="olympic section">
+  </div>
+</div>
 
-
-<ol> Type of programs:
-<li><%=link_to("Powerlifting (#{@pl_count})","/programs/powerlifting_index")%></li>
-<li><%=link_to("Bodybuilding (#{@bb_count})","/programs/bodybuilding_index")%></li>
-<li><%=link_to("Strongman (#{@sm_count})","/programs/strongman_index")%></li>
-<li><%=link_to("Olympic (#{@ol_count})","/programs/olympic_index")%></li>
-</ol>
-<a class="btn btn-success", href="/programs/new", role="button">Create Program</a>
+<script>
+    function growDiv(id) {
+        var growDiv = document.getElementById(id);
+             if (growDiv.clientWidth) {
+                growDiv.style.width = 0;
+            } else {
+                growDiv.style.width = "500px";
+            }
+        }
+</script>
