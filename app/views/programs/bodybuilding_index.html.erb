@@ -1,6 +1,6 @@
 <h3>Bodybuilding programs:</h3>
 <%@programs.each do |program|%>
-<%= link_to(program.name,"/programs/#{program.id}")%>
+<%= link_to(program.name,"/programs/#{program.id}")%>(<%=program.score%>)
 <br>
 <%end%>
 <br>

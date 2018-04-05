@@ -1,6 +1,6 @@
 <h3>Strongman programs:</h3>
 <%@programs.each do |program|%>
-<%= link_to(program.name,"/programs/#{program.id}")%>
+<%= link_to(program.name,"/programs/#{program.id}")%>(<%=program.score%>)
 <%end%>
 <br>
 <a class="btn btn-success", href="/programs/new", role="button">Create Program</a>

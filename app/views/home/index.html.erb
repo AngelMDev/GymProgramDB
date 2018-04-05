@@ -1,30 +1,46 @@
 <div class="cont external">
   <div class="powerlifting section" onclick="growDiv('pl')">
-    <div class="pl_content" id="pl">
+    <div id="pl" class="inner_container">       
         <h3>Powerlifting programs:</h3>
         <%@pl_programs.each do |program|%>
-        <%= link_to(program.name,"/programs/#{program.id}")%>
+        <%= link_to(program.name,"/programs/#{program.id}")%>(<%=program.score%>)
         <br>
         <%end%>
         <br>
-        <a class="btn btn-success", href="/programs/new", role="button">Create Program</a>
+        <a class="btn btn-success", href="/programs/powerlifting_index", role="button">View all programs</a>
     </div>
   </div>
-  <div class="bodybuilding section">
+  <div class="bodybuilding section" onclick="growDiv('bb')">
+    <div id="bb" class="inner_container">
+        <h3>Bodybuilding programs:</h3>
+        <%@bb_programs.each do |program|%>
+        <%= link_to(program.name,"/programs/#{program.id}")%>(<%=program.score%>)
+        <br>
+        <%end%>
+        <br>
+        <a class="btn btn-success", href="/programs/bodybuilding_index", role="button">View all programs</a>
+    </div>
+
   </div>
-  <div class="strongman section">
+  <div class="strongman section" onclick="growDiv('sm')">
+    <div id="sm" class="inner_container">
+        <h3>Strongman programs:</h3>
+        <%@sm_programs.each do |program|%>
+        <%= link_to(program.name,"/programs/#{program.id}")%>(<%=program.score%>)
+        <%end%>
+        <br>
+        <a class="btn btn-success", href="/programs/strongman_index", role="button">View all programs</a>
+    </div>
   </div>
-  <div class="olympic section">
+  <div class="olympic section" onclick="growDiv('ol')">
+    <div id="ol" class="inner_container">
+        <h3>Olympic programs:</h3>
+        <%@ol_programs.each do |program|%>
+        <%= link_to(program.name,"/programs/#{program.id}")%>(<%=program.score%>)
+        <br>
+        <%end%>
+        <br>
+        <a class="btn btn-success", href="/programs/olympic_index", role="button">View all programs</a>
+    </div>
   </div>
 </div>
-
-<script>
-    function growDiv(id) {
-        var growDiv = document.getElementById(id);
-             if (growDiv.clientWidth) {
-                growDiv.style.width = 0;
-            } else {
-                growDiv.style.width = "500px";
-            }
-        }
-</script>

@@ -6,6 +6,12 @@ Rails.application.routes.draw do
   get "programs/olympic_index", to: 'programs#olympic_index'
   get "programs/powerlifting_index", to: 'programs#powerlifting_index'
   get "programs/strongman_index", to: 'programs#strongman_index'
-  resources :programs
+  resources :programs 
+  resources :programs do
+    member do
+      put :upvote
+      put :downvote
+    end
+  end
   resources :users
 end

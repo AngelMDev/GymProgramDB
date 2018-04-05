@@ -1,18 +1,27 @@
 
-<h3><%=@program.name%></h3>
-by <%=@author_name%>
-<br>
-<h4><%=@program.program_type%></h4>
-<br>
-<%=@program.difficulty%> program
-<br>
-<div>Duration: <%=@program.days%> days </div>
-<br>
-<%=@program.content%>
-<br>
-<%if @user_can_edit%>
-  <%=link_to("Edit Program","/programs/#{@program.id}/edit")%>
-<%end%>
-<%if @user_can_delete%>
-  <%= button_to "Delete", @program, :method => :delete, data: { confirm: "Are you sure?" } %>
-<%end%>
+<div class="program-container">
+  <h3><%=@program.program_type%> program</h3>
+  <h4><%=@program.name%></h4>
+  by <%=@author_name%>
+  <br>
+   Score: <%= @program.score %>
+  <br>
+  <br>
+  <%=@program.difficulty%> program
+  <br>
+  <div>Duration: <%=@program.days%> days </div>
+  <br>
+  <%=@program.content%>
+  <br>
+  <%if @user_can_vote%>
+    <%= link_to("Upvote",upvote_program_path(@program.id), method: :put)%>
+    <%= link_to("Downvote",downvote_program_path(@program.id), method: :put)%>
+    <br>
+  <%end%>
+  <%if @user_can_edit%>
+    <%=link_to("Edit Program","/programs/#{@program.id}/edit")%>
+  <%end%>
+  <%if @user_can_delete%>
+    <%= button_to "Delete", @program, :method => :delete, data: { confirm: "Are you sure?" } %>
+  <%end%>
+</div>

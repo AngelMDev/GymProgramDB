@@ -11,7 +11,7 @@ class ProgramsController < ApplicationController
   end
 
   def powerlifting_index
-    @pl_programs=Program.where(program_type: "Powerlifting")
+    @programs=Program.where(program_type: "Powerlifting")
   end
 
   def strongman_index
@@ -21,8 +21,17 @@ class ProgramsController < ApplicationController
   def show
      @program=Program.find(params[:id])
      @author_name=User.find(@program.user_id).username
-     @user_can_edit = current_user && (current_user.id==@program.user_id || current_user.admin?)
+     @user_can_edit = current_user && (current_user.id == @program.user_id || current_user.admin?)
      @user_can_delete = current_user && current_user.admin?
+     @user_can_vote = current_user && (current_user.id != @program.user_id || current_user.admin?)
+  end
+
+  def upvote
+    Program.increment_counter(:score, params[:id])
+  end
+
+  def downvote
+    Program.decrement_counter(:score, params[:id])
   end
 
   def edit
@@ -37,6 +46,7 @@ class ProgramsController < ApplicationController
 
   def create
     @program=current_user.programs.new(program_params)
+    @program.score=0;
     if @program.save
       redirect_to @program
     end
@@ -51,6 +61,7 @@ class ProgramsController < ApplicationController
     program.destroy!
     redirect_to '/'
   end
+
 
   private
   def program_params
