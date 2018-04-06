@@ -16,12 +16,13 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js'></script>
     <a class="navbar-brand d-flex w-50 mr-auto" href="/">LiftsDB</a> 
     <div class="navbar-collapse ">
-      <form class="search" id="form_search">
-        <input class="search-input" id="input_search" type="text" autocomplete="off"/>
+      <form class="search" id="form_search" action = "/search/">
+        <input class="search-input" id="input_search" type="text" autocomplete="off" name="searchTB"/>
         <label class="search-label" for="input" id="label_search"></label>
         <button class="search-button" type="reset" id="button_search"></button>
         <div class="search-border" id="border_search"></div>
         <div class="search-close" id="close_search">x</div>
+        <input style="display:none;" type="submit"/>
       </form>
     </div>   
     <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
@@ -96,6 +97,12 @@
       if (val.length) {
         cloneLbl();
         createLblTxt(val);
+        debugger;
+        $.ajax({
+          url: "/search/",
+          type: "get",
+          data: $("home#search"),
+        });
       }
       else TLSrch.reverse();
       searchInp.value = '';

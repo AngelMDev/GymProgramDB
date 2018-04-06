@@ -9,4 +9,10 @@ class HomeController < ApplicationController
     @pl_programs = Program.where(program_type: "Powerlifting")
     @pl_count = @pl_programs.count  
   end
+
+  def search
+    query=params[:searchTB]
+    @data=Program.where("name LIKE ?","%#{query}%").or(Program.where("program_type LIKE ?","%#{query}"))  
+  end
+
 end

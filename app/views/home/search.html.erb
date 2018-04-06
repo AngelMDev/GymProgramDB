@@ -1,0 +1,5 @@
+<h3>Search Results: </h3>
+<% @data.each do |record| %>
+  <%= link_to record.name,"/programs/#{record.id}"%>
+  <br>
+<%end%>

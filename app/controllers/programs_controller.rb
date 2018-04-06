@@ -28,14 +28,16 @@ class ProgramsController < ApplicationController
 
   def upvote
     if (current_user && (current_user.id != @program.user_id && !Score.exists?(:user_id => current_user.id)) || current_user.admin?)
-      object=Score.new(:user_id => current_user.id,:program_id => params[:id],:direction => 1)
+      object=Score.new(:user_id => current_user.id,:program_id => params[:id], :direction => 1)
       object.save
     end
   end
 
   def downvote
-    object=Score.new(:user_id => current_user.id,:program_id => params[:id],:direction => -1)
-    object.save
+    if (current_user && (current_user.id != @program.user_id && !Score.exists?(:user_id => current_user.id)) || current_user.admin?)
+      object=Score.new(:user_id => current_user.id,:program_id => params[:id],:direction => -1)
+      object.save
+    end
   end
 
   def edit
@@ -44,8 +46,10 @@ class ProgramsController < ApplicationController
 
   def update
     program = Program.find(params[:id])
-    program.update!(program_params)
-    redirect_to program
+    if (current_user && (current_user.id == program.user_id || current_user.admin?))
+      program.update!(program_params)
+      redirect_to program
+    end
   end
 
   def create
@@ -74,4 +78,5 @@ class ProgramsController < ApplicationController
   def score_params
     params.require(:score).permit(:user_id,:program_id,:direction)
   end
+
 end

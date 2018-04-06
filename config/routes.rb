@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get "programs/olympic_index", to: 'programs#olympic_index'
   get "programs/powerlifting_index", to: 'programs#powerlifting_index'
   get "programs/strongman_index", to: 'programs#strongman_index'
+  get '/search/', :to => 'home#search'
   resources :programs 
   resources :users
   resources :programs do
