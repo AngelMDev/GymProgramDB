@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 20180405205942) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "programs", force: :cascade do |t|
     t.string "name"
     t.string "program_type"
@@ -49,4 +52,5 @@ ActiveRecord::Schema.define(version: 20180405205942) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end
+
 end
