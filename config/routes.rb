@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   devise_for :users
-  get "/users/sign_out", to: 'devise/sessions#destroy'
+  devise_scope :user do
+    get "/users/sign_out", to: 'devise/sessions#destroy'
+  end
   root 'home#index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   get "programs/bodybuilding_index", to: 'programs#bodybuilding_index'
